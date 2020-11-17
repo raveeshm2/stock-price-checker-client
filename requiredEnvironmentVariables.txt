@@ -1,0 +1,3 @@
+"REACT_APP_BASE_URL" -> Back End Server URL (Node JS)
+"REACT_APP_VAPID_PUBLIC_KEY": -> Vapid Public Key, required for setting up subscriptions
+"REACT_APP_HOSTED_URL" -> URL to open when a notification is clicked

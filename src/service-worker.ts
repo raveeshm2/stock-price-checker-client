@@ -13,6 +13,7 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import icon from "./images/logo96.png";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -76,5 +77,26 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
+self.addEventListener('notificationclick', (event) => {
+  const notification = event.notification;
+  event.waitUntil(self.clients.openWindow(process.env.REACT_APP_HOSTED_URL!));
+  notification.close();
+});
+
+self.addEventListener('push', event => {
+  if (event.data) {
+    const data = JSON.parse(event.data.text());
+    const options = {
+      body: data.content,
+      vibrate: [250],
+      icon,
+      badge: icon
+    }
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  }
+})
 
 // Any other custom service worker logic can go here.
