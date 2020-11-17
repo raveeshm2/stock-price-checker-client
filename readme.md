@@ -71,7 +71,7 @@ Once the application is started, Click on "Enable Notification Alerts
 
 You should receive a system notification if subscription was set correctly.
 
-![alt text](images/notification.PNG)
+![alt text](images/notification.png)
 
 Now add a stock to your watch list by entering a company name in search box
 
@@ -91,6 +91,6 @@ After subscription is set, you would be able to get alerts for a stock and recei
 
 This app can also be setup on your mobile phone. Just delpoy the app on a server, something like (heroku or netlify) and open the deployed URL in chrome. 
 
-Since it's PWA, you'll get an option to add the app to your home screen. From there it can be used as a native app without opening the browser every time
+Since it's PWA, you'll get an option to add the app to your home screen. From there it can be used as a native app without opening the browser every time. Now you can tap on the notification alerts to open the stock watchlist.
 
 This app also updates stock prices added to watchlist in real time during market hours (9AM - 4 PM) [can be configured in the server app]
