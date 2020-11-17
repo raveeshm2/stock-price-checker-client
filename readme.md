@@ -67,23 +67,23 @@ And paste the contents of build folder inside server folder as 'build-client'.
 
 Once the application is started, Click on "Enable Notification Alerts
 
-![alt text](images\header.PNG)
+![alt text](images/header.PNG)
 
 You should receive a system notification if subscription was set correctly.
 
-![alt text](images\notification.PNG)
+![alt text](images/notification.PNG)
 
 Now add a stock to your watch list by entering a company name in search box
 
-![alt text](images\search.PNG)
+![alt text](images/search.PNG)
 
 The stock would be added successfully to your watchlist.
 
-![alt text](images\stock.PNG)
+![alt text](images/stock.PNG)
 
 Click on Notification button (bell icon) to set a alert for the stock. 
 
-![alt text](images\modal.PNG)
+![alt text](images/modal.PNG)
 
 Specify the type as greater than or lesser than and a cut off price. Click Add trigger.
 
