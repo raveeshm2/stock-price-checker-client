@@ -10,6 +10,8 @@ import { Trigger } from './Trigger';
 import { DeleteTriggerModal } from './modals/DeleteTriggerModal';
 import { EditTriggerModal } from './modals/EditTriggerModal';
 import { Spinner } from '../ui/Spinner';
+import { DeleteAllTriggers } from './DeleteAllTriggers';
+import { Response } from "../global/model/response";
 
 interface TriggerListProps {
 
@@ -21,6 +23,7 @@ export const TriggerList: React.FC<TriggerListProps> = (props) => {
     const response = useSelector<State, ItemRequestState<TriggerResponsePayload[]>>(state => state.triggers.list);
     const [deleteTrigger, setDeleteTrigger] = useState<{ id: string, symbol: string } | null>(null);
     const [editTrigger, setEditTrigger] = useState<{ id: string, symbol: string, type: 'gte' | 'lte', price: number } | null>(null);
+    const deleteResponse = useSelector<State, ItemRequestState<Response>>(state => state.triggers.delete);
 
     useEffect(() => {
         dispatch(GET_TRIGGER_RESOURCE.request(null));
@@ -46,7 +49,7 @@ export const TriggerList: React.FC<TriggerListProps> = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {response.data.map((trigger, index) => <Trigger setDeleteTrigger={setDeleteTrigger} setEditTrigger={setEditTrigger} sno={index + 1} {...trigger} />)}
+                                    {response.data.map((trigger, index) => <Trigger key={index} setDeleteTrigger={setDeleteTrigger} setEditTrigger={setEditTrigger} sno={index + 1} {...trigger} />)}
                                 </tbody>
                             </Table>
                             :
@@ -58,11 +61,17 @@ export const TriggerList: React.FC<TriggerListProps> = (props) => {
             {deleteTrigger && <DeleteTriggerModal
                 show={true}
                 onHide={() => setDeleteTrigger(null)}
-                {...deleteTrigger} />}
+                type='single'
+                text="Are you sure, you want to remove this alert ?"
+                payload={{ id: deleteTrigger.id }}
+                symbol={deleteTrigger.symbol}
+                response={deleteResponse}
+            />}
             {editTrigger && <EditTriggerModal
                 show={true}
                 onHide={() => setEditTrigger(null)}
                 {...editTrigger} />}
+            {response.data && response.data.length > 0 && <DeleteAllTriggers />}
         </>
     );
 }

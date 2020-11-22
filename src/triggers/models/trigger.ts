@@ -8,6 +8,10 @@ export interface DeleteTriggerModel {
     id: string
 }
 
+export interface DeleteAllTriggerModel {
+    onlyTriggered: boolean
+}
+
 export interface UpdateTriggerModel {
     id: string,
     type: string,

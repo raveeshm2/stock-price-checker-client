@@ -4,7 +4,7 @@ import { ItemRequestState } from "../../global/model/state";
 import { addReducers, combineSimplyfiedReducers, handleUndefinedState } from "../../global/store/reducer";
 import { getResourceInitialState } from "../../global/store/request";
 import { TriggerResponsePayload } from "../models/trigger";
-import { ADD_TRIGGER_RESOURCE, DELETE_TRIGGER_RESOURCE, GET_TRIGGER_RESOURCE, UPDATE_TRIGGER_RESOURCE } from "./saga";
+import { ADD_TRIGGER_RESOURCE, DELETE_TRIGGER_ALL_RESOURCE, DELETE_TRIGGER_RESOURCE, GET_TRIGGER_RESOURCE, UPDATE_TRIGGER_RESOURCE } from "./saga";
 
 
 export interface State {
@@ -12,6 +12,7 @@ export interface State {
     add: ItemRequestState<Response>;
     update: ItemRequestState<Response>;
     delete: ItemRequestState<Response>;
+    deleteAll: ItemRequestState<Response>
 }
 
 export const initialState: State = {
@@ -19,6 +20,8 @@ export const initialState: State = {
     add: getResourceInitialState(null),
     update: getResourceInitialState(null),
     delete: getResourceInitialState(null),
+    deleteAll: getResourceInitialState(null)
+
 };
 
 export const reducer = handleUndefinedState(
@@ -32,6 +35,8 @@ export const reducer = handleUndefinedState(
             update: UPDATE_TRIGGER_RESOURCE.reducer,
             // @ts-ignore
             delete: DELETE_TRIGGER_RESOURCE.reducer,
+            // @ts-ignore
+            deleteAll: DELETE_TRIGGER_ALL_RESOURCE.reducer,
         })
     ]),
     initialState

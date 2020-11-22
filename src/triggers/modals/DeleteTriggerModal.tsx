@@ -1,34 +1,47 @@
 import React, { useEffect } from 'react';
 import { Button, Modal, Spinner } from 'react-bootstrap';
-import { State } from "../../root/store/reducer";
 import { ItemRequestState } from '../../global/model/state';
-import { useDispatch, useSelector } from 'react-redux';
-import { DELETE_TRIGGER_RESOURCE } from '../store/saga';
+import { useDispatch } from 'react-redux';
+import { DELETE_TRIGGER_ALL_RESOURCE, DELETE_TRIGGER_RESOURCE } from '../store/saga';
 import { Response } from "../../global/model/response";
+import { DeleteAllTriggerModel, DeleteTriggerModel } from '../models/trigger';
 
 interface DeleteTriggerModalProps {
-    id: string,
     show: boolean,
     onHide: () => void,
-    symbol: string
+    symbol?: string,
+    text: string,
+    type: 'single' | 'multiple',
+    payload: DeleteTriggerModel | DeleteAllTriggerModel,
+    response: ItemRequestState<Response>
 }
 
-export const DeleteTriggerModal: React.FC<DeleteTriggerModalProps> = ({ id, symbol, show, onHide }) => {
+export const DeleteTriggerModal: React.FC<DeleteTriggerModalProps> = ({ symbol, show, onHide, text, type, payload, response }) => {
 
     const dispatch = useDispatch();
-    const response = useSelector<State, ItemRequestState<Response>>(state => state.triggers.delete);
 
     async function onSubmit() {
-        dispatch(DELETE_TRIGGER_RESOURCE.request({
-            id
-        }));
+        if (type === 'single' && "id" in payload) {
+            dispatch(DELETE_TRIGGER_RESOURCE.request({
+                ...payload
+            }));
+        } else {
+            if ("onlyTriggered" in payload) {
+                dispatch(DELETE_TRIGGER_ALL_RESOURCE.request({
+                    ...payload
+                }));
+            }
+        }
     }
 
     useEffect(() => {
         return () => {
-            dispatch(DELETE_TRIGGER_RESOURCE.clear())
+            if (type === 'single')
+                dispatch(DELETE_TRIGGER_RESOURCE.clear());
+            else
+                dispatch(DELETE_TRIGGER_ALL_RESOURCE.clear());
         }
-    }, [dispatch]);
+    }, [dispatch, type]);
 
     useEffect(() => {
         if (!response.loading && (response.data || response.error)) {
@@ -47,11 +60,11 @@ export const DeleteTriggerModal: React.FC<DeleteTriggerModalProps> = ({ id, symb
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    {symbol}
+                    {symbol || "Delete Alerts"}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h5>Are you sure, you want to remove this alert ?</h5>
+                <h5>{text}</h5>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" type="submit" disabled={response.loading} onClick={onSubmit}>

@@ -6,12 +6,13 @@ import { SagaBase } from "../../global/store/saga-base";
 import { Requests } from "../../global/requests";
 import { createToast } from "../../ui/toast/action";
 import { Response } from "../../global/model/response";
-import { AddTriggerModel, DeleteTriggerModel, UpdateTriggerModel, TriggerResponsePayload } from "../models/trigger";
+import { AddTriggerModel, DeleteTriggerModel, UpdateTriggerModel, TriggerResponsePayload, DeleteAllTriggerModel } from "../models/trigger";
 
 export const GET_TRIGGER_RESOURCE = new Resource<null, TriggerResponsePayload[], ItemRequestState<TriggerResponsePayload[]>>('/TRIGGER/LIST');
 export const ADD_TRIGGER_RESOURCE = new Resource<AddTriggerModel, Response, ItemRequestState<Response>>('/TRIGGER/ADD');
 export const UPDATE_TRIGGER_RESOURCE = new Resource<UpdateTriggerModel, Response, ItemRequestState<Response>>('/TRIGGER/UPDATE');
 export const DELETE_TRIGGER_RESOURCE = new Resource<DeleteTriggerModel, Response, ItemRequestState<Response>>('/TRIGGER/DELETE');
+export const DELETE_TRIGGER_ALL_RESOURCE = new Resource<DeleteAllTriggerModel, Response, ItemRequestState<Response>>('/TRIGGER/DELETE/All');
 
 export class TriggersSaga extends SagaBase {
 
@@ -21,7 +22,8 @@ export class TriggersSaga extends SagaBase {
             [GET_TRIGGER_RESOURCE.requestActionType]: this.getTriggers,
             [ADD_TRIGGER_RESOURCE.requestActionType]: this.addTrigger,
             [UPDATE_TRIGGER_RESOURCE.requestActionType]: this.updateTrigger,
-            [DELETE_TRIGGER_RESOURCE.requestActionType]: this.deleteTrigger
+            [DELETE_TRIGGER_RESOURCE.requestActionType]: this.deleteTrigger,
+            [DELETE_TRIGGER_ALL_RESOURCE.requestActionType]: this.deleteAllTrigger
         };
 
 
@@ -107,6 +109,30 @@ export class TriggersSaga extends SagaBase {
             }, 1000);
         } catch (err) {
             yield put(DELETE_TRIGGER_RESOURCE.error(err));
+            if (err.errors.includes("User is not authenticated")) {
+                yield put(push('/')); // Redirect to login page
+            }
+            yield put(createToast("Error", err.errors.join('. ')));
+        }
+    }
+
+    /**
+     * Sends Delete All Trigger Request
+     * @param action 
+     */
+    *deleteAllTrigger(action: ReturnType<typeof DELETE_TRIGGER_ALL_RESOURCE.request>): IterableIterator<any> {
+        try {
+            const response = (yield call(Requests.delete, {
+                url: '/trigger/delete/all',
+                payload: action.payload
+            }))! as Response;
+            yield put(DELETE_TRIGGER_ALL_RESOURCE.response(response));
+            yield put(createToast("Success", response.message.join('')));
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } catch (err) {
+            yield put(DELETE_TRIGGER_ALL_RESOURCE.error(err));
             if (err.errors.includes("User is not authenticated")) {
                 yield put(push('/')); // Redirect to login page
             }

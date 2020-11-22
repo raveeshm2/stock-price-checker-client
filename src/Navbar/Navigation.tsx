@@ -63,7 +63,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
     return (
         <>
             <Navbar bg="dark" variant="dark" fixed="top" expand="md">
-                <Navbar.Brand href="#home">Stock Price Checker</Navbar.Brand>
+                <Navbar.Brand href="#home">Alertify</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
