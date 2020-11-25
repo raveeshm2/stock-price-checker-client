@@ -2,7 +2,8 @@
 import React from "react";
 
 export interface Global {
-    interval: NodeJS.Timeout | null
+    interval: NodeJS.Timeout | null,
+    portfolioInterval: NodeJS.Timeout | null,
 }
 
 export interface InitialState {
@@ -11,10 +12,15 @@ export interface InitialState {
 
 export interface UpdateIntervalKey {
     type: 'UPDATE_INTERVAL_KEY',
-    payload: Global
+    payload: { interval: NodeJS.Timeout | null }
 }
 
-export type Action = UpdateIntervalKey;
+export interface UpdatePortfolioIntervalKey {
+    type: 'UPDATE_PORTFOLIO_INTERVAL_KEY',
+    payload: { portfolioInterval: NodeJS.Timeout | null }
+}
+
+export type Action = UpdateIntervalKey | UpdatePortfolioIntervalKey;
 
 export interface GlobalState extends InitialState {
     dispatch?: React.Dispatch<Action>
@@ -22,7 +28,8 @@ export interface GlobalState extends InitialState {
 
 export const initialState: InitialState = {
     global: {
-        interval: null
+        interval: null,
+        portfolioInterval: null
     }
 }
 
@@ -32,6 +39,14 @@ export function reducer(state = initialState, action: Action): InitialState {
             return {
                 ...state,
                 global: { ...state.global, ...action.payload }
+            }
+        case 'UPDATE_PORTFOLIO_INTERVAL_KEY':
+            return {
+                ...state,
+                global: {
+                    ...state.global,
+                    ...action.payload
+                }
             }
         default:
             return initialState;

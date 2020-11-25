@@ -70,6 +70,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
                         <Nav.Link href="#home" onClick={() => dispatch(push('/stockList'))}>Home</Nav.Link>
                         <Nav.Link href="#notifications" onClick={configurePubSub}>Enable Notification Alerts</Nav.Link>
                         <Nav.Link href="#alerts" onClick={() => dispatch(push('/triggerList'))}>Manage Alerts</Nav.Link>
+                        <Nav.Link href="#portfolio" onClick={() => dispatch(push('/portfolio'))}>Portfolio</Nav.Link>
                         <Nav.Link href="#settings" onClick={() => setSettings(true)}>Settings</Nav.Link>
                         <Nav.Link href="#logout" onClick={() => dispatch(LOGOUT_RESOURCE.request(null))} >Log out</Nav.Link>
                     </Nav>

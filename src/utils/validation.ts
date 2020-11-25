@@ -27,3 +27,12 @@ export const AddTriggerValidationSchema = yup.object({
     type: yup.string().required('Alias name is required'),
     price: yup.string().required('Cutoff price is required').matches(/^[0-9.]+$/, 'Only Numbers are supported')
 });
+
+export const AddHoldingValidationSchema = yup.object({
+    quantity: yup.string().required('Quantity is required'),
+    price: yup.string().required('Price is required').matches(/^[0-9.]+$/, 'Only Numbers are supported')
+});
+
+export const DeleteHoldingValidationSchema = yup.object({
+    quantity: yup.string().required('Quantity is required')
+});

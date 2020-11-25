@@ -15,6 +15,7 @@ import { Provider } from "react-redux";
 import { StocksSaga } from './stocks/store/saga';
 import { SubscriptionSaga } from './Navbar/subscription/store/saga';
 import { TriggersSaga } from './triggers/store/saga';
+import { PortfolioSaga } from "./portfolio/store/saga";
 
 export const history = createBrowserHistory();
 const sagaMiddleware = createSagaMiddleware();
@@ -28,7 +29,8 @@ const saga = new MainSaga([
   new UserSaga(),
   new StocksSaga(),
   new SubscriptionSaga(),
-  new TriggersSaga()
+  new TriggersSaga(),
+  new PortfolioSaga()
 ]);
 
 sagaMiddleware.run(saga.rootSaga.bind(saga));

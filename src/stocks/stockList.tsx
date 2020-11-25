@@ -12,6 +12,9 @@ import { AddTriggerModal } from './modals/AddTriggerModal';
 import { DeleteStockModal } from './modals/DeleteStockModal';
 import { Spinner } from '../ui/Spinner';
 import { GlobalContext } from '../global/context';
+import { AddHoldingModal } from '../portfolio/modals/AddHoldingModal';
+import { DeleteHoldingModal } from '../portfolio/modals/DeleteHoldingModal';
+
 
 interface stockListProps {
 
@@ -22,7 +25,9 @@ export const StockList: React.FC<stockListProps> = (props) => {
     const dispatch = useDispatch();
     const response = useSelector<State, ItemRequestState<StockListResponsePayload>>(state => state.stocks.list);
     const [addTrigger, setAddTrigger] = useState<{ symbol: string, name: string } | null>(null);
+    const [addHolding, setAddHolding] = useState<{ symbol: string, name: string } | null>(null);
     const [deleteStock, setDeleteStock] = useState<{ symbol: string, name: string } | null>(null);
+    const [deleteHolding, setDeleteHolding] = useState<{ symbol: string, name: string } | null>(null);
     const context = useContext(GlobalContext);
 
     useEffect(() => {
@@ -82,7 +87,7 @@ export const StockList: React.FC<stockListProps> = (props) => {
                         <CardDeck>
                             {Object.keys(response.data).map(symbol =>
                                 symbol !== "isMarketOpen" ? <Col lg="4" className='mt-4' key={symbol}>
-                                    <Stock symbol={symbol} {...response!.data![symbol]} setAddTrigger={setAddTrigger} setDeleteStock={setDeleteStock} />
+                                    <Stock symbol={symbol} {...response!.data![symbol]} setAddTrigger={setAddTrigger} setDeleteStock={setDeleteStock} setAddHolding={setAddHolding} setDeleteHolding={setDeleteHolding} />
                                 </Col> : null
                             )}
                         </CardDeck>
@@ -101,6 +106,16 @@ export const StockList: React.FC<stockListProps> = (props) => {
                 name={deleteStock ? deleteStock.name : ''}
                 symbol={deleteStock ? deleteStock.symbol : ''}
                 onHide={() => setDeleteStock(null)} />}
+            {addHolding && <AddHoldingModal
+                show={addHolding ? true : false}
+                name={addHolding ? addHolding.name : ''}
+                symbol={addHolding ? addHolding.symbol : ''}
+                onHide={() => setAddHolding(null)} />}
+            {deleteHolding && <DeleteHoldingModal
+                show={deleteHolding ? true : false}
+                name={deleteHolding ? deleteHolding.name : ''}
+                symbol={deleteHolding ? deleteHolding.symbol : ''}
+                onHide={() => setDeleteHolding(null)} />}
         </>
     );
 }
